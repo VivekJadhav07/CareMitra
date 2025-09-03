@@ -1,0 +1,16 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+
+    <!-- Cross shape -->
+    <path
+        android:fillColor="#295b75"
+        android:pathData="M40,0 L60,0 L60,40 L100,40 L100,60 L60,60 L60,100 L40,100 L40,60 L0,60 L0,40 L40,40 L40,0 Z" />
+
+    <!-- Stylized hand shape (simplified) -->
+    <path
+        android:fillColor="#ffffff"
+        android:pathData="M55,45 Q52,55 50,55 Q48,55 45,45 Q44,42 43,40 Q57,40 55,45 Z" />
+</vector>

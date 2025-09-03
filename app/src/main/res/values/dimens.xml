@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Padding and Margins -->
+    <dimen name="tiny_padding">2dp</dimen>
+    <dimen name="small_padding">8dp</dimen>
+    <dimen name="content_padding">18dp</dimen>
+    <dimen name="element_margin">12dp</dimen>
+    <dimen name="card_margin">14dp</dimen>
+    <dimen name="card_spacing">10dp</dimen>
+    <dimen name="bottom_padding">80dp</dimen>
+
+    <!-- Card Properties -->
+    <dimen name="card_corner_radius">12dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
+    <dimen name="button_corner_radius">25dp</dimen>
+
+    <!-- Text Sizes (Universal) -->
+    <dimen name="title_text_size">24sp</dimen>
+    <dimen name="welcome_text_size">19sp</dimen>
+    <dimen name="section_title_size">17sp</dimen>
+    <dimen name="body_text_size">15sp</dimen>
+    <dimen name="caption_text_size">13sp</dimen>
+    <dimen name="nav_text_size">11sp</dimen>
+    <dimen name="button_text_size">16sp</dimen>
+
+    <!-- Element Sizes -->
+    <dimen name="logo_size">45dp</dimen>
+    <dimen name="profile_size">42dp</dimen>
+    <dimen name="nav_icon_size">25dp</dimen>
+    <dimen name="alert_dot_size">11dp</dimen>
+    <dimen name="chart_height">210dp</dimen>
+
+    <!-- Layout Heights -->
+    <dimen name="header_min_height">65dp</dimen>
+    <dimen name="button_height">52dp</dimen>
+    <dimen name="nav_height">72dp</dimen>
+    <dimen name="nav_elevation">8dp</dimen>
+
+    <!-- Spacing -->
+    <dimen name="line_spacing">4dp</dimen>
+</resources>

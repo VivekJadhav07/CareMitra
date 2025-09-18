@@ -2,19 +2,34 @@ package com.example.caremitra;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class LoginActivity extends Activity {
 
     private EditText inputEmail, inputPassword;
     private Button buttonLogin;
     private TextView forgotPassword, signUpLink;
+
+    private static final String SUPABASE_URL = "https://uvxkiqrqnxgmsipkjhbe.supabase.co";
+    private static final String SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2eGtpcXJxbnhnbXNpcGtqaGJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyMjc0MTYsImV4cCI6MjA3MTgwMzQxNn0.GEYSncagmsr8BkBPe8IGRSGke0llj4skHWBENnyyTJI";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,27 +42,15 @@ public class LoginActivity extends Activity {
         forgotPassword = findViewById(R.id.forgotPassword);
         signUpLink = findViewById(R.id.signUpLink);
 
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                attemptLogin();
-            }
-        });
+        buttonLogin.setOnClickListener(v -> attemptLogin());
 
-        forgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "Forgot Password feature coming soon", Toast.LENGTH_SHORT).show();
-            }
-        });
+        forgotPassword.setOnClickListener(v ->
+                Toast.makeText(LoginActivity.this, "Forgot Password feature coming soon", Toast.LENGTH_SHORT).show()
+        );
 
-        signUpLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Navigate to SignUp activity (implement separately)
-              Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
-               startActivity(intent);
-            }
+        signUpLink.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -65,13 +68,72 @@ public class LoginActivity extends Activity {
             return;
         }
 
-        // TODO: Add your login validation/authentication here
+        loginWithSupabase(email, password);
+    }
 
-        Toast.makeText(this, "Login successful (placeholder)", Toast.LENGTH_SHORT).show();
+    private void loginWithSupabase(String email, String password) {
+        OkHttpClient client = new OkHttpClient();
 
-        // On successful login, navigate to Home/Dashboard
-       Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-        startActivity(intent);
-       finish();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("email", email);
+            jsonObject.put("password", password);
+        } catch (Exception e) {
+            Toast.makeText(this, "Error creating login request", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        RequestBody body = RequestBody.create(
+                jsonObject.toString(),
+                MediaType.parse("application/json")
+        );
+
+        Request request = new Request.Builder()
+                .url(SUPABASE_URL + "/auth/v1/token?grant_type=password")
+                .header("apikey", SUPABASE_ANON_KEY)
+                .header("Authorization", "Bearer " + SUPABASE_ANON_KEY)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(() ->
+                        Toast.makeText(LoginActivity.this, "Login failed: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                );
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String respBody = response.body().string();
+                if (response.isSuccessful()) {
+                    try {
+                        JSONObject json = new JSONObject(respBody);
+                        JSONObject user = json.optJSONObject("user");
+                        String userId = user != null ? user.optString("id", "") : "";
+                        String accessToken = json.optString("access_token", "");
+
+                        SharedPreferences prefs = getSharedPreferences("user", MODE_PRIVATE);
+                        prefs.edit().putString("supabase_user_id", userId).apply();
+                        prefs.edit().putString("supabase_access_token", accessToken).apply();
+
+                        runOnUiThread(() -> {
+                            Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            finish();
+                        });
+                    } catch (Exception e) {
+                        runOnUiThread(() ->
+                                Toast.makeText(LoginActivity.this, "Login failed: Unable to parse user info", Toast.LENGTH_LONG).show()
+                        );
+                    }
+                } else {
+                    runOnUiThread(() ->
+                            Toast.makeText(LoginActivity.this, "Invalid credentials!", Toast.LENGTH_LONG).show()
+                    );
+                }
+            }
+        });
     }
 }

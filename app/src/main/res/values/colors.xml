@@ -3,11 +3,14 @@
     <!-- Primary colors -->
     <color name="primary_blue">#295B75</color>
     <color name="emergency_red">#D32F2F</color>
-    <color name="white">#FFFFFF</color>
+
 
     <!-- Text colors -->
     <color name="text_primary">#222222</color>
     <color name="text_secondary">#666666</color>
+    <color name="main_blue">#1179FA</color>
+    <color name="light_blue">#E4F1FE</color>
+    <color name="white">#FFFFFF</color>
 
     <!-- Navigation colors -->
     <color name="nav_selected">#295B75</color>

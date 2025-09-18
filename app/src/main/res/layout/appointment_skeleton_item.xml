@@ -1,6 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Single appointment card skeleton -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_marginBottom="12dp"
+        android:elevation="2dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp">
+
+        <!-- Header row with avatar and details -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <!-- Doctor avatar placeholder -->
+            <View
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="#E0E0E0"
+                android:layout_marginEnd="12dp" />
+
+            <!-- Doctor info placeholders -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <!-- Doctor name -->
+                <View
+                    android:layout_width="140dp"
+                    android:layout_height="16dp"
+                    android:background="#E0E0E0"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Specialization -->
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="14dp"
+                    android:background="#E0E0E0"
+                    android:layout_marginBottom="6dp" />
+
+                <!-- Date/Time -->
+                <View
+                    android:layout_width="120dp"
+                    android:layout_height="12dp"
+                    android:background="#E0E0E0" />
+            </LinearLayout>
+
+            <!-- Status badge placeholder -->
+            <View
+                android:layout_width="60dp"
+                android:layout_height="24dp"
+                android:background="#E0E0E0" />
+        </LinearLayout>
+
+        <!-- Appointment details row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+
+            <!-- Location icon + text -->
+            <View
+                android:layout_width="80dp"
+                android:layout_height="12dp"
+                android:background="#E0E0E0"
+                android:layout_marginEnd="16dp" />
+
+            <!-- Duration -->
+            <View
+                android:layout_width="60dp"
+                android:layout_height="12dp"
+                android:background="#E0E0E0" />
+        </LinearLayout>
+
+        <!-- Action buttons row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <!-- Cancel/Reschedule button -->
+            <View
+                android:layout_width="70dp"
+                android:layout_height="32dp"
+                android:background="#E0E0E0"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Call/Message button -->
+            <View
+                android:layout_width="70dp"
+                android:layout_height="32dp"
+                android:background="#E0E0E0" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

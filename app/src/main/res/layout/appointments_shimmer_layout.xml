@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<com.facebook.shimmer.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:shimmer="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/shimmerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    shimmer:shimmer_auto_start="true"
+    shimmer:shimmer_base_alpha="0.7"
+    shimmer:shimmer_direction="left_to_right"
+    shimmer:shimmer_duration="1500"
+    shimmer:shimmer_repeat_count="-1"
+    shimmer:shimmer_repeat_delay="500"
+    shimmer:shimmer_shape="linear">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="12dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Multiple skeleton appointment cards -->
+            <include layout="@layout/appointment_skeleton_item" />
+            <include layout="@layout/appointment_skeleton_item" />
+            <include layout="@layout/appointment_skeleton_item" />
+            <include layout="@layout/appointment_skeleton_item" />
+            <include layout="@layout/appointment_skeleton_item" />
+            <include layout="@layout/appointment_skeleton_item" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</com.facebook.shimmer.ShimmerFrameLayout>

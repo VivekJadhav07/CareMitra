@@ -39,7 +39,9 @@ public class OnboardingActivity extends AppCompatActivity {
                 R.drawable.logo_tbi));
         items.add(new OnboardingItem("3rd Page Title",
                 "Description for third onboarding screen.",
-                R.drawable.logo_tbi));
+                R.drawable.
+
+                        logo_tbi));
         items.add(new OnboardingItem("4th Page Title",
                 "Description for fourth onboarding screen.",
                 R.drawable.logo_tbi));

@@ -140,9 +140,11 @@ public class HomeActivity extends AppCompatActivity implements HomeDataLoader.Da
         menuWallet.setOnClickListener(v ->
                 Toast.makeText(this, "Wallet selected", Toast.LENGTH_SHORT).show());
 
-        profile.setOnClickListener(v ->
-                Toast.makeText(this, "Profile selected", Toast.LENGTH_SHORT).show());
-
+        profile.setOnClickListener(v ->{
+            Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+            startActivity(intent);
+            Toast.makeText(this, "Profile  selected", Toast.LENGTH_SHORT).show();
+        });
 
 
 

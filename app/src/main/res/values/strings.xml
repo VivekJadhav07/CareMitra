@@ -1,23 +1,9 @@
 <resources>
     <string name="app_name">CareMitra</string>
     <string name="user_stats">B+ Blood Group   Age : 20  male\nHeight : 5\'8\"   Weight : 58 kg   BMI : 22.3</string>
-
-<string-array name="gender_array">
-    <item>Select Gender</item>
-    <item>Male</item>
-    <item>Female</item>
-    <item>Other</item>
-</string-array>
-
-<string-array name="blood_group_array">
-    <item>Select Blood Group</item>
-    <item>A+</item>
-    <item>A-</item>
-    <item>B+</item>
-    <item>B-</item>
-    <item>AB+</item>
-    <item>AB-</item>
-    <item>O+</item>
-    <item>O-</item>
-</string-array>
+    <string-array name="gender_options">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
 </resources>

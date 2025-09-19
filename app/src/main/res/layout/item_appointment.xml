@@ -3,11 +3,13 @@
     xmlns:card="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/tools"
     android:layout_margin="8dp"
     card:cardCornerRadius="16dp"
     card:cardElevation="5dp"
     card:cardUseCompatPadding="true"
-    android:background="@android:color/transparent">
+    android:background="@android:color/transparent"
+    app:ignore="NamespaceTypo">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +28,7 @@
             <ImageView
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:tint="#b285f7"
+                app:tint="#b285f7"
                 android:src="@drawable/ic_hospital_24" />
 
             <TextView
@@ -50,7 +52,7 @@
             <ImageView
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:tint="#ffbb33"
+                app:tint="#ffbb33"
                 android:src="@drawable/ic_event_24" />
 
             <LinearLayout

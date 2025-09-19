@@ -4,7 +4,13 @@
     <color name="primary_blue">#295B75</color>
     <color name="emergency_red">#D32F2F</color>
 
+    <color name="background_light">#F5F5F5</color>
 
+    <color name="button_bg">#2196F3</color>
+    <color name="button_text">#FFFFFF</color>
+    <color name="profile_bg_start">#1A237E</color>
+    <color name="profile_bg_end">#3F51B5</color>
+    <color name="verified_bg">#4CAF50</color>
     <!-- Text colors -->
     <color name="text_primary">#222222</color>
     <color name="text_secondary">#666666</color>
@@ -15,5 +21,17 @@
     <!-- Navigation colors -->
     <color name="nav_selected">#295B75</color>
     <color name="nav_normal">#FFFFFF</color>
+    <!-- Existing colors -->
+    <color name="primary_color">#4A90E2</color>
+    <color name="primary_light">#7BB3F0</color>
+    <color name="secondary_text">#808080</color>
+
+    <!-- Profile circle colors -->
+    <color name="profile_circle_bg">#E3F2FD</color>
+    <color name="profile_border">#4A90E2</color>
+
+    <!-- Alternative colors for different themes -->
+    <color name="profile_circle_bg_light">#F0F8FF</color>
+    <color name="profile_circle_bg_dark">#2C3E50</color>
 </resources>
 

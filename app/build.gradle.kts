@@ -52,6 +52,9 @@ android {
 }
 
 dependencies {
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
+    implementation("com.google.code.gson:gson:2.8.9")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
     // Standard AndroidX and Google Libraries
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
@@ -65,11 +68,18 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+    // Volley (for API calls to Supabase REST)
+    implementation("com.android.volley:volley:1.2.1")
+
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
 
     // UI Libraries
     implementation("com.tbuonomo:dotsindicator:4.3")
+
     implementation("com.facebook.shimmer:shimmer:0.5.0")
 
     // JSON Parsing

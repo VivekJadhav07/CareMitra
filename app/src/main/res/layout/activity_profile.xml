@@ -1,10 +1,309 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/profileViewSwitcher"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProfileActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include layout="@layout/profile_skeleton_layout"/>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <ScrollView
+        android:id="@+id/actualProfileContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@android:color/holo_blue_light"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:elevation="4dp">
+
+                <ImageView
+                    android:id="@+id/backButton"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@android:drawable/ic_menu_revert"
+                    app:tint="@android:color/white"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:padding="4dp"
+                    android:layout_marginRight="16dp"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="My Profile"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <ImageView
+                    android:id="@+id/menuButton"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@android:drawable/ic_menu_more"
+                    app:tint="@android:color/white"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:padding="4dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="end"
+                    android:paddingBottom="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Light Mode"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/darker_gray"/>
+                    <Switch
+                        android:id="@+id/themeSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:paddingLeft="8dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="16dp">
+
+                    <FrameLayout
+                        android:layout_width="72dp"
+                        android:layout_height="72dp">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/profilePic"
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
+                            android:src="@drawable/profile_logo"
+                            app:civ_border_width="2dp"
+                            app:civ_border_color="@android:color/holo_blue_light" />
+
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingLeft="16dp">
+
+                        <TextView
+                            android:id="@+id/profileName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Dnyaneshwar Nikam"
+                            android:textStyle="bold"
+                            android:textSize="20sp"
+                            android:textColor="@android:color/black"/>
+
+                        <TextView
+                            android:id="@+id/profileAge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Age: 28 years"
+                            android:textSize="14sp"
+                            android:textColor="@android:color/darker_gray"/>
+
+                        <TextView
+                            android:id="@+id/profileVerified"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="✓ Verified Patient"
+                            android:textSize="12sp"
+                            android:textColor="@android:color/holo_blue_dark"
+                            android:background="@drawable/verified_bg"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            android:layout_marginTop="4dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/patientId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Patient ID: 9876543210"
+                    android:textSize="15sp"
+                    android:textColor="@android:color/black"
+                    android:paddingBottom="4dp"/>
+                <TextView
+                    android:id="@+id/dob"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DOB: 01/01/1995"
+                    android:textSize="15sp"
+                    android:textColor="@android:color/black"
+                    android:paddingBottom="4dp"/>
+                <TextView
+                    android:id="@+id/bloodGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Blood Group: O+"
+                    android:textSize="15sp"
+                    android:textColor="@android:color/black"
+                    android:paddingBottom="4dp"/>
+
+                <TextView
+                    android:id="@+id/gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gender: N/A"
+                    android:textSize="15sp"
+                    android:textColor="@android:color/black"
+                    android:paddingBottom="20dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:paddingBottom="24dp">
+
+                    <Button
+                        android:id="@+id/downloadRecordsBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="📋 My Records"
+                        android:backgroundTint="@android:color/holo_blue_light"
+                        android:textColor="@android:color/white"
+                        android:textStyle="bold"/>
+                    <Button
+                        android:id="@+id/bookAppointmentBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="53dp"
+                        android:layout_weight="1"
+                        android:text="📅 Book Appointment"
+                        android:backgroundTint="@android:color/darker_gray"
+                        android:textColor="@android:color/black"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="8dp"/>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/editProfileBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="✏️ Edit Profile"
+                    android:backgroundTint="@android:color/holo_blue_light"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp"/>
+
+                <Button
+                    android:id="@+id/medicalHistoryBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="🏥 Medical History"
+                    android:backgroundTint="@android:color/holo_blue_light"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp"/>
+
+                <Button
+                    android:id="@+id/appointmentsBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="📋 My Appointments"
+                    android:backgroundTint="@android:color/holo_blue_light"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp"/>
+
+                <Button
+                    android:id="@+id/prescriptionsBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="💊 Prescriptions"
+                    android:backgroundTint="@android:color/holo_blue_light"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp"/>
+
+                <Button
+                    android:id="@+id/settingsBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="⚙️ Settings"
+                    android:backgroundTint="@android:color/holo_blue_light"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp"/>
+
+                <Button
+                    android:id="@+id/helpSupportBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="❓ Help  Support"
+                    android:backgroundTint="@android:color/holo_blue_light"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp"/>
+
+                <Button
+                    android:id="@+id/feedbackBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="💬 Feedback"
+                    android:backgroundTint="@android:color/holo_blue_light"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp"/>
+
+                <Button
+                    android:id="@+id/logoutBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="🚪 Logout"
+                    android:backgroundTint="@android:color/holo_red_light"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
+
+                <TextView
+                    android:id="@+id/versionInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Version 1.0"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:layout_gravity="center_horizontal"
+                    android:paddingTop="12dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</ViewSwitcher>

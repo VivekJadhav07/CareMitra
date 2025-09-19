@@ -44,6 +44,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
     // Volley (for API calls to Supabase REST)
     implementation("com.android.volley:volley:1.2.1")
     implementation("com.facebook.shimmer:shimmer:0.5.0")

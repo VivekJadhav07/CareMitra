@@ -14,9 +14,6 @@ public class ApiClient {
 
     private static final String BASE_URL = "https://uvxkiqrqnxgmsipkjhbe.supabase.co/rest/v1/";
 
-
-    private static final String SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2eGtpcXJxbnhnbXNpcGtqaGJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyMjc0MTYsImV4cCI6MjA3MTgwMzQxNn0.GEYSncagmsr8BkBPe8IGRSGke0llj4skHWBENnyyTJI";
-
     public static Retrofit getClient(Context context) {
         SharedPreferences prefs = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         String accessToken = prefs.getString("supabase_access_token", "");
@@ -27,7 +24,7 @@ public class ApiClient {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(chain -> {
                     Request newRequest = chain.request().newBuilder()
-                            .addHeader("apikey", SUPABASE_API_KEY)
+                            .addHeader("apikey", BuildConfig.SUPABASE_API_KEY)
                             .addHeader("Authorization", "Bearer " + accessToken)
                             .build();
                     return chain.proceed(newRequest);

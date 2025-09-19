@@ -1,3 +1,5 @@
 *.iml
 .idea/
  .idea/
+ # Local properties file containing credentials and other secrets
+ local.properties

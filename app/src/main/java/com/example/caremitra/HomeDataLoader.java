@@ -48,7 +48,7 @@ public class HomeDataLoader {
         String timestamp = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
 
         HomeData data = new HomeData();
-        data.welcomeMessage = "Welcome, Bro";
+        data.welcomeMessage = "Welcome, Bro expert";
         data.networkStatus = "Connected - Last updated: " + timestamp;
         data.sugarLevel = "Sugar Level: " + (80 + random.nextInt(40)) + " mg/dL";
         data.heartRate = "❤️ Heart Rate: " + (60 + random.nextInt(40)) + " bpm";

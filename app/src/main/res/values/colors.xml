@@ -4,7 +4,13 @@
     <color name="primary_blue">#295B75</color>
     <color name="emergency_red">#D32F2F</color>
 
+    <color name="background_light">#F5F5F5</color>
 
+    <color name="button_bg">#2196F3</color>
+    <color name="button_text">#FFFFFF</color>
+    <color name="profile_bg_start">#1A237E</color>
+    <color name="profile_bg_end">#3F51B5</color>
+    <color name="verified_bg">#4CAF50</color>
     <!-- Text colors -->
     <color name="text_primary">#222222</color>
     <color name="text_secondary">#666666</color>

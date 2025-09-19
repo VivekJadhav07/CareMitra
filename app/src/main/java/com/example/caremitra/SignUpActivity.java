@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -79,25 +80,18 @@ public class SignUpActivity extends Activity {
             return;
         }
 
-        signUpWithSupabase(name, email, password);
+        signUpWithSupabase(email, password);
     }
 
-    private void signUpWithSupabase(String name, String email, String password) {
+    private void signUpWithSupabase(String email, String password) {
         OkHttpClient client = new OkHttpClient();
 
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("email", email);
             jsonObject.put("password", password);
-
-            JSONObject options = new JSONObject();
-            JSONObject userMetadata = new JSONObject();
-            userMetadata.put("name", name);
-            options.put("data", userMetadata);
-            jsonObject.put("options", options);
-
         } catch (Exception e) {
-            Toast.makeText(this, "Error creating sign up request", Toast.LENGTH_SHORT).show();
+            runOnUiThread(() -> Toast.makeText(this, "Error creating sign up request", Toast.LENGTH_SHORT).show());
             return;
         }
 
@@ -133,6 +127,7 @@ public class SignUpActivity extends Activity {
                     String errorMsg = response.body() != null ? response.body().string() : "Unknown error";
                     runOnUiThread(() ->
                             Toast.makeText(SignUpActivity.this, "Sign Up failed: " + errorMsg, Toast.LENGTH_LONG).show());
+                    Log.e("SignUpActivity", "Sign Up failed: " + errorMsg);
                 }
             }
         });

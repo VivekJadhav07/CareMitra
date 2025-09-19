@@ -29,7 +29,7 @@ public class LoginActivity extends Activity {
     private TextView forgotPassword, signUpLink;
 
     private static final String SUPABASE_URL = "https://uvxkiqrqnxgmsipkjhbe.supabase.co";
-    private static final String SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2eGtpcXJxbnhnbXNpcGtqaGJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyMjc0MTYsImV4cCI6MjA3MTgwMzQxNn0.GEYSncagmsr8BkBPe8IGRSGke0llj4skHWBENnyyTJI";
+    private static final String key =BuildConfig.SUPABASE_API_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +90,8 @@ public class LoginActivity extends Activity {
 
         Request request = new Request.Builder()
                 .url(SUPABASE_URL + "/auth/v1/token?grant_type=password")
-                .header("apikey", SUPABASE_ANON_KEY)
-                .header("Authorization", "Bearer " + SUPABASE_ANON_KEY)
+                .header("apikey", key)
+                .header("Authorization", "Bearer " + key)
                 .post(body)
                 .build();
 

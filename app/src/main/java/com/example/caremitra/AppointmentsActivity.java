@@ -44,6 +44,7 @@ public class AppointmentsActivity extends AppCompatActivity {
 
         apiService = ApiClient.getClient(this).create(ApiService.class);
 
+
         // Set initial selected state
         btnScheduled.setSelected(true);
         loadAppointments("scheduled");

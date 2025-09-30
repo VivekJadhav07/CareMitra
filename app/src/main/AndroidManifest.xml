@@ -16,6 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CareMitra">
         <activity
+            android:name=".Transaction"
+            android:exported="false" />
+        <activity
+            android:name=".AnalyticsDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VitalsHistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditProfileActivity"
             android:exported="false" />
         <activity

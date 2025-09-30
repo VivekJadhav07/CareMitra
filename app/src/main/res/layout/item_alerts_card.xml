@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="16dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginHorizontal="16dp"
+    app:cardBackgroundColor="#FFFDE7"
     app:cardCornerRadius="16dp"
-    app:cardElevation="4dp"
-    android:minHeight="150dp">
+    app:cardElevation="0dp"
+    app:strokeColor="#FFCA28"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,14 +18,26 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Alerts"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:textColor="#222"
-            android:paddingBottom="8dp"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_warning"
+                app:tint="#FFB300"
+                android:layout_marginEnd="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Important Alerts"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="#222" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/alertsContainer"

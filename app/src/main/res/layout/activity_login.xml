@@ -1,3 +1,4 @@
+<!-- res/layout/activity_login.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -61,16 +62,32 @@
             android:clickable="true"
             android:focusable="true" />
 
-        <Button
-            android:id="@+id/buttonLogin"
+        <!-- Login button with inline progress -->
+        <FrameLayout
+            android:id="@+id/loginButtonContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Login"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#295b75"
-            android:padding="12dp"
-            android:textSize="18sp"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/buttonLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#295b75"
+                android:padding="12dp"
+                android:textSize="18sp" />
+
+            <ProgressBar
+                android:id="@+id/loginProgress"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:indeterminate="true"
+                android:visibility="gone"
+                android:layout_gravity="center" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"

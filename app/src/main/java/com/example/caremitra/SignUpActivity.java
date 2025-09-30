@@ -4,17 +4,24 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
+
 import java.io.IOException;
 
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class SignUpActivity extends Activity {
 
@@ -22,8 +29,12 @@ public class SignUpActivity extends Activity {
     private Button buttonSignUp;
     private TextView loginLink;
 
+    private FrameLayout signUpButtonContainer;
+    private ProgressBar signUpProgress;
+    private boolean isSigningUp = false;
+
     private static final String SUPABASE_URL = "https://uvxkiqrqnxgmsipkjhbe.supabase.co";
-    private static final String SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2eGtpcXJxbnhnbXNpcGtqaGJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyMjc0MTYsImV4cCI6MjA3MTgwMzQxNn0.GEYSncagmsr8BkBPe8IGRSGke0llj4skHWBENnyyTJI";
+    private static final String SUPABASE_ANON_KEY = BuildConfig.SUPABASE_API_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,24 +48,28 @@ public class SignUpActivity extends Activity {
         buttonSignUp = findViewById(R.id.buttonSignUp);
         loginLink = findViewById(R.id.loginLink);
 
-        buttonSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                attemptSignUp();
-            }
-        });
+        signUpButtonContainer = findViewById(R.id.signUpButtonContainer);
+        signUpProgress = findViewById(R.id.signUpProgress);
 
-        loginLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        buttonSignUp.setOnClickListener(v -> attemptSignUp());
+
+        loginLink.setOnClickListener(v -> {
+            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 
+    private void setSignUpLoading(boolean loading) {
+        isSigningUp = loading;
+        buttonSignUp.setEnabled(!loading);
+        buttonSignUp.setText(loading ? "" : "Sign Up");
+        signUpProgress.setVisibility(loading ? android.view.View.VISIBLE : android.view.View.GONE);
+    }
+
     private void attemptSignUp() {
+        if (isSigningUp) return;
+
         String name = inputName.getText().toString().trim();
         String email = inputEmail.getText().toString().trim();
         String password = inputPassword.getText().toString();
@@ -64,22 +79,20 @@ public class SignUpActivity extends Activity {
             inputName.setError("Please enter your full name");
             return;
         }
-
         if (TextUtils.isEmpty(email)) {
             inputEmail.setError("Please enter your email");
             return;
         }
-
         if (TextUtils.isEmpty(password)) {
             inputPassword.setError("Please enter your password");
             return;
         }
-
         if (!password.equals(confirmPassword)) {
             inputConfirmPassword.setError("Passwords do not match");
             return;
         }
 
+        setSignUpLoading(true);
         signUpWithSupabase(email, password);
     }
 
@@ -91,7 +104,10 @@ public class SignUpActivity extends Activity {
             jsonObject.put("email", email);
             jsonObject.put("password", password);
         } catch (Exception e) {
-            runOnUiThread(() -> Toast.makeText(this, "Error creating sign up request", Toast.LENGTH_SHORT).show());
+            runOnUiThread(() -> {
+                setSignUpLoading(false);
+                Toast.makeText(this, "Error creating sign up request", Toast.LENGTH_SHORT).show();
+            });
             return;
         }
 
@@ -108,26 +124,28 @@ public class SignUpActivity extends Activity {
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                runOnUiThread(() ->
-                        Toast.makeText(SignUpActivity.this, "Sign Up failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
+            @Override public void onFailure(Call call, IOException e) {
+                runOnUiThread(() -> {
+                    setSignUpLoading(false);
+                    Toast.makeText(SignUpActivity.this, "Sign Up failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
             }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            @Override public void onResponse(Call call, Response response) throws IOException {
+                String errorMsg = response.body() != null ? response.body().string() : "";
                 if (response.isSuccessful()) {
                     runOnUiThread(() -> {
-                        Toast.makeText(SignUpActivity.this, "Sign Up successful! Check your email to confirm your account.", Toast.LENGTH_LONG).show();
+                        setSignUpLoading(false);
+                        Toast.makeText(SignUpActivity.this, "Sign Up successful! Check email to confirm your account.", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
                     });
                 } else {
-                    String errorMsg = response.body() != null ? response.body().string() : "Unknown error";
-                    runOnUiThread(() ->
-                            Toast.makeText(SignUpActivity.this, "Sign Up failed: " + errorMsg, Toast.LENGTH_LONG).show());
-                    Log.e("SignUpActivity", "Sign Up failed: " + errorMsg);
+                    runOnUiThread(() -> {
+                        setSignUpLoading(false);
+                        Toast.makeText(SignUpActivity.this, "Sign Up failed: " + errorMsg, Toast.LENGTH_LONG).show();
+                    });
                 }
             }
         });

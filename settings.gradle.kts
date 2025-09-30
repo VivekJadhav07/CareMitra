@@ -16,6 +16,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // Note the slightly different syntax for Kotlin scripts
+        maven { url = uri("https://jitpack.io") }
     }
 }
 

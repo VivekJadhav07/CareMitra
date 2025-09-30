@@ -1,8 +1,10 @@
 package com.example.caremitra;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
@@ -20,9 +22,19 @@ public class OnboardingActivity extends AppCompatActivity {
     private Button buttonNext, buttonSkip;
     private DotsIndicator dotsIndicator;
 
+    // REMOVED: SharedPreferences declarations and logic
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
+        // WOW EFFECT: Make Activity Full Screen and Transparent Status Bar
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
         super.onCreate(savedInstanceState);
+
+        // REMOVED: SharedPreferences check that was redirecting to LoginActivity
+
         setContentView(R.layout.activity_onboarding);
 
         viewPager = findViewById(R.id.viewPagerOnboarding);
@@ -30,55 +42,64 @@ public class OnboardingActivity extends AppCompatActivity {
         buttonSkip = findViewById(R.id.buttonSkip);
         dotsIndicator = findViewById(R.id.dotsIndicator);
 
-        List<OnboardingItem> items = new ArrayList<>();
-        items.add(new OnboardingItem("Seamless Integration Across Providers",
-                "Integrate seamlessly with hospitals and clinics, ensuring a cohesive healthcare experience.",
-                R.drawable.logo_tbi));
-        items.add(new OnboardingItem("2nd Page Title",
-                "Description for second onboarding screen.",
-                R.drawable.logo_tbi));
-        items.add(new OnboardingItem("3rd Page Title",
-                "Description for third onboarding screen.",
-                R.drawable.
+        // VISUAL CONTRAST: Set navigation text to White for contrast
+        buttonNext.setTextColor(Color.WHITE);
+        buttonSkip.setTextColor(Color.WHITE);
 
-                        logo_tbi));
-        items.add(new OnboardingItem("4th Page Title",
-                "Description for fourth onboarding screen.",
-                R.drawable.logo_tbi));
+        List<OnboardingItem> items = new ArrayList<>();
+
+        items.add(new OnboardingItem(
+                "Seamless Care, One App",
+                "Link hospitals, clinics, and labs in one place to view records, book visits, and manage health effortlessly.",
+                R.drawable.seamless
+        ));
+
+        items.add(new OnboardingItem(
+                "Smart Appointments",
+                "Find doctors, check slots, and book or reschedule in seconds with reminders so nothing gets missed.",
+                R.drawable.smart
+        ));
+
+        items.add(new OnboardingItem(
+                "Your Records. Your Control.",
+                "Access prescriptions, reports, and history securely anytime. Share with providers when needed.",
+                R.drawable.records
+        ));
+
+        items.add(new OnboardingItem(
+                "Private and Secure",
+                "Bank‑grade security with verified profiles. Data stays encrypted and in your control.",
+                R.drawable.blockchain
+        ));
 
         adapter = new OnboardingAdapter(items);
         viewPager.setAdapter(adapter);
-
         dotsIndicator.setViewPager2(viewPager);
 
-        buttonSkip.setOnClickListener(v -> {
-            goToLogin();
-        });
+        // Update skip and next actions to simply goToLogin()
+        buttonSkip.setOnClickListener(v -> goToLogin());
 
         buttonNext.setOnClickListener(v -> {
             if (viewPager.getCurrentItem() + 1 < adapter.getItemCount()) {
                 viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
             } else {
-                goToLogin();
+                goToLogin(); // Direct navigation without setting SharedPreferences flag
             }
         });
 
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback(){
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
-            public void onPageSelected(int position){
+            public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                if(position == adapter.getItemCount() - 1){
-                    buttonNext.setText("Finish");
-                } else {
-                    buttonNext.setText("Next");
-                }
+                buttonNext.setText(position == adapter.getItemCount() - 1 ? "Start Now" : "Next");
             }
         });
     }
 
-    private void goToLogin(){
-        Intent intent = new Intent(OnboardingActivity.this, LoginActivity.class);
-        startActivity(intent);
+    // REMOVED: completeOnboarding() method
+
+    private void goToLogin() {
+        startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
 }

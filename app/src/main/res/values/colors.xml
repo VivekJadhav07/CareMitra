@@ -4,7 +4,7 @@
     <color name="primary_blue">#295B75</color>
     <color name="emergency_red">#D32F2F</color>
 
-    <color name="background_light">#F5F5F5</color>
+    <color name="background_light">#FAFAFA</color>
 
     <color name="button_bg">#2196F3</color>
     <color name="button_text">#FFFFFF</color>
@@ -16,8 +16,10 @@
     <color name="text_secondary">#666666</color>
     <color name="main_blue">#1179FA</color>
     <color name="light_blue">#E4F1FE</color>
-    <color name="white">#FFFFFF</color>
 
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
     <!-- Navigation colors -->
     <color name="nav_selected">#295B75</color>
     <color name="nav_normal">#FFFFFF</color>
@@ -33,5 +35,11 @@
     <!-- Alternative colors for different themes -->
     <color name="profile_circle_bg_light">#F0F8FF</color>
     <color name="profile_circle_bg_dark">#2C3E50</color>
+
+
+    <color name="ColorPrimary">@android:color/holo_blue_light</color>
+
+    <color name="green">#4CAF50</color>
+    <color name="red">#F44336</color>
 </resources>
 

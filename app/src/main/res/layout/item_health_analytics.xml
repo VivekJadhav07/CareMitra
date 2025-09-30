@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/healthAnalyticsCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="12dp"
+    android:layout_marginHorizontal="16dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Health Analytics"
+            android:textColor="#295B75"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingBottom="12dp" />
+
+        <ImageView
+            android:id="@+id/graphImage"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/sugargraph"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/sugarLevels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sugar Levels: --"
+            android:textColor="#295B75"
+            android:textSize="14sp" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

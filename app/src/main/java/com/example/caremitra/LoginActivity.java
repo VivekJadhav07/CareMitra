@@ -1,26 +1,30 @@
 package com.example.caremitra;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class LoginActivity extends Activity {
 
@@ -28,9 +32,12 @@ public class LoginActivity extends Activity {
     private Button buttonLogin;
     private TextView forgotPassword, signUpLink;
 
+    private FrameLayout loginButtonContainer;
+    private ProgressBar loginProgress;
+    private boolean isLoggingIn = false;
+
     private static final String SUPABASE_URL = "https://uvxkiqrqnxgmsipkjhbe.supabase.co";
-    // NOTE: Replace this with your BuildConfig.SUPABASE_API_KEY if you use it.
-    private static final String SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2eGtpcXJxbnhnbXNpcGtqaGJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyMjc0MTYsImV4cCI6MjA3MTgwMzQxNn0.GEYSncagmsr8BkBPe8IGRSGke0llj4skHWBENnyyTJI";
+    private static final String SUPABASE_ANON_KEY = BuildConfig.SUPABASE_API_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +49,9 @@ public class LoginActivity extends Activity {
         buttonLogin = findViewById(R.id.buttonLogin);
         forgotPassword = findViewById(R.id.forgotPassword);
         signUpLink = findViewById(R.id.signUpLink);
+
+        loginButtonContainer = findViewById(R.id.loginButtonContainer);
+        loginProgress = findViewById(R.id.loginProgress);
 
         buttonLogin.setOnClickListener(v -> attemptLogin());
 
@@ -55,7 +65,16 @@ public class LoginActivity extends Activity {
         });
     }
 
+    private void setLoginLoading(boolean loading) {
+        isLoggingIn = loading;
+        buttonLogin.setEnabled(!loading);
+        buttonLogin.setText(loading ? "" : "Login");
+        loginProgress.setVisibility(loading ? android.view.View.VISIBLE : android.view.View.GONE);
+    }
+
     private void attemptLogin() {
+        if (isLoggingIn) return;
+
         String email = inputEmail.getText().toString().trim();
         String password = inputPassword.getText().toString();
 
@@ -69,6 +88,7 @@ public class LoginActivity extends Activity {
             return;
         }
 
+        setLoginLoading(true);
         loginWithSupabase(email, password);
     }
 
@@ -80,7 +100,10 @@ public class LoginActivity extends Activity {
             jsonObject.put("email", email);
             jsonObject.put("password", password);
         } catch (Exception e) {
-            runOnUiThread(() -> Toast.makeText(this, "Error creating login request", Toast.LENGTH_SHORT).show());
+            runOnUiThread(() -> {
+                setLoginLoading(false);
+                Toast.makeText(this, "Error creating login request", Toast.LENGTH_SHORT).show();
+            });
             return;
         }
 
@@ -97,41 +120,40 @@ public class LoginActivity extends Activity {
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                runOnUiThread(() ->
-                        Toast.makeText(LoginActivity.this, "Login failed: " + e.getMessage(), Toast.LENGTH_LONG).show()
-                );
+            @Override public void onFailure(Call call, IOException e) {
+                runOnUiThread(() -> {
+                    setLoginLoading(false);
+                    Toast.makeText(LoginActivity.this, "Login failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
             }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String respBody = response.body().string();
+            @Override public void onResponse(Call call, Response response) throws IOException {
+                String respBody = response.body() != null ? response.body().string() : "";
                 if (response.isSuccessful()) {
                     try {
                         JSONObject json = new JSONObject(respBody);
                         String accessToken = json.optString("access_token", "");
                         String userId = json.optJSONObject("user").optString("id", "");
 
-                        // Save tokens and user ID
                         SharedPreferences.Editor editor = getSharedPreferences("user", MODE_PRIVATE).edit();
                         editor.putString("supabase_access_token", accessToken);
                         editor.putString("user_id", userId);
                         editor.apply();
 
-                        // Now, check if a profile exists for this user ID
+                        // keep spinner on during profile check/create
                         checkAndCreateProfile(userId, accessToken);
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
-                        runOnUiThread(() ->
-                                Toast.makeText(LoginActivity.this, "Failed to parse login response", Toast.LENGTH_LONG).show()
-                        );
+                        runOnUiThread(() -> {
+                            setLoginLoading(false);
+                            Toast.makeText(LoginActivity.this, "Failed to parse login response", Toast.LENGTH_LONG).show();
+                        });
                     }
                 } else {
-                    runOnUiThread(() ->
-                            Toast.makeText(LoginActivity.this, "Invalid credentials!", Toast.LENGTH_LONG).show()
-                    );
+                    runOnUiThread(() -> {
+                        setLoginLoading(false);
+                        Toast.makeText(LoginActivity.this, "Invalid credentials!", Toast.LENGTH_LONG).show();
+                    });
                 }
             }
         });
@@ -140,7 +162,6 @@ public class LoginActivity extends Activity {
     private void checkAndCreateProfile(String userId, String accessToken) {
         OkHttpClient client = new OkHttpClient();
 
-        // 1. Check if profile exists
         Request checkRequest = new Request.Builder()
                 .url(SUPABASE_URL + "/rest/v1/users?id=eq." + userId)
                 .header("apikey", SUPABASE_ANON_KEY)
@@ -149,45 +170,25 @@ public class LoginActivity extends Activity {
                 .build();
 
         client.newCall(checkRequest).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                // Network error, proceed to HomeActivity
-                runOnUiThread(() -> {
-                    Toast.makeText(LoginActivity.this, "Profile check failed. Proceeding.", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                });
+            @Override public void onFailure(Call call, IOException e) {
+                // Proceed anyway
+                finishLoginAndGoHome("Profile check failed. Proceeding.");
             }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            @Override public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    String responseBody = response.body().string();
+                    String responseBody = response.body() != null ? response.body().string() : "[]";
                     try {
                         JSONArray usersArray = new JSONArray(responseBody);
                         if (usersArray.length() > 0) {
-                            // Profile exists, go to HomeActivity
-                            Log.d("LoginActivity", "Profile exists. Proceeding.");
-                            runOnUiThread(() -> {
-                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                startActivity(intent);
-                                finish();
-                            });
+                            finishLoginAndGoHome(null);
                         } else {
-                            // Profile does not exist, create it
-                            Log.d("LoginActivity", "Profile does not exist. Creating new profile.");
                             createProfile(userId, accessToken);
                         }
                     } catch (JSONException e) {
-                        // Error parsing JSON, assume profile does not exist and create it
-                        e.printStackTrace();
-                        Log.e("LoginActivity", "JSON parsing failed, assuming new profile. " + e.getMessage());
                         createProfile(userId, accessToken);
                     }
                 } else {
-                    // An error occurred, assume profile needs to be created
-                    Log.e("LoginActivity", "Failed to check for profile: " + response.code() + ". Assuming new profile.");
                     createProfile(userId, accessToken);
                 }
             }
@@ -199,10 +200,9 @@ public class LoginActivity extends Activity {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("id", userId);
-            jsonObject.put("name", "New User"); // Default name
-            // Add other default fields if needed
+            jsonObject.put("name", "New User");
         } catch (Exception e) {
-            e.printStackTrace();
+            finishLoginAndGoHome("Profile creation skipped.");
             return;
         }
 
@@ -218,37 +218,27 @@ public class LoginActivity extends Activity {
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                runOnUiThread(() -> {
-                    Toast.makeText(LoginActivity.this, "Profile creation failed. Proceeding anyway.", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                });
+            @Override public void onFailure(Call call, IOException e) {
+                finishLoginAndGoHome("Profile creation failed. Proceeding.");
             }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    Log.d("LoginActivity", "Profile created successfully.");
-                    runOnUiThread(() -> {
-                        Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                        startActivity(intent);
-                        finish();
-                    });
-                } else {
-                    String errorBody = response.body() != null ? response.body().string() : "Unknown error";
-                    Log.e("LoginActivity", "Failed to create profile: " + response.code() + " - " + errorBody);
-                    runOnUiThread(() -> {
-                        Toast.makeText(LoginActivity.this, "Login successful, but profile creation failed.", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                        startActivity(intent);
-                        finish();
-                    });
-                }
+            @Override public void onResponse(Call call, Response response) throws IOException {
+                finishLoginAndGoHome(null);
             }
+        });
+    }
+
+    private void finishLoginAndGoHome(String toastMsg) {
+        runOnUiThread(() -> {
+            if (toastMsg != null && !toastMsg.isEmpty()) {
+                Toast.makeText(LoginActivity.this, toastMsg, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+            }
+            setLoginLoading(false);
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 }
